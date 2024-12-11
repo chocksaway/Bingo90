@@ -73,7 +73,7 @@ public class BingoNumberGeneratorTest {
 
         bingoStrip.update(layout);
 
-        bingoStrip.print();
+        bingoStrip.print(bingoStrip.update(layout));
     }
 
     /**
