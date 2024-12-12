@@ -9,11 +9,14 @@ public class BingoStrip {
     private static final Logger logger = LoggerFactory.getLogger(BingoStrip.class);
     private final int columnHeight;
 
+    private int[][] overlay;
+
     public BingoStrip(final int columnHeight) {
         this.columnHeight = columnHeight;
+        overlay = new int[columnHeight][9];
     }
 
-    public int[][] update(int[][] overlay) {
+    public void update(int[][] overlay) {
         logger.debug("Updating overlay with bingo numbers");
 
         final var bingoNumberGenerator = new BingoNumbersGenerator();
@@ -27,7 +30,7 @@ public class BingoStrip {
             writeValuesToColumn(overlay, columnCounter, bingoNumbers);
         }
 
-        return overlay;
+        this.overlay = overlay;
     }
 
 
@@ -58,12 +61,32 @@ public class BingoStrip {
         return count;
     }
 
-    public void print(int[][] overlay) {
+    @Override
+    public java.lang.String toString() {
+        return print();
+    }
+
+    private String print() {
+        final var sb = new StringBuilder();
+        var marker = 0;
+        sb.append("\n-----------------------------------------------------------------------\n");
+
         for (int[] row : overlay) {
             for (int num : row) {
-                System.out.print("\t" + num + "\t");
+                final String numStr = num == -1 ? "X" : String.valueOf(num);
+                sb.append("\t").append(numStr).append("\t");
+            }
+
+            if (marker == 2) {
+                sb.append("\n-----------------------------------------------------------------------\n");
+                marker = 0;
+            } else {
+                sb.append("\n");
+                marker++;
             }
         }
+
+        return sb.toString();
     }
 
 }
