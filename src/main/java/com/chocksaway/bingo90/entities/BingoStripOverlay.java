@@ -1,80 +1,58 @@
 package com.chocksaway.bingo90.entities;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BingoStripOverlay {
+    private static final Logger logger = LoggerFactory.getLogger(BingoStripOverlay.class);
     private final int[][] layout;
 
     public BingoStripOverlay(int rows, int columns) {
-        layout = new int[rows][columns];
-        populateArray(layout, rows, columns);
+        this.layout = new int[rows][columns];
+        populate();
     }
 
     public int[][] getLayout() {
         return this.layout;
     }
 
-    private void populateArray(int[][] array, int rows, int columns) {
-        Random random = new Random();
-
-        // Place -1 values randomly in each row ensuring exactly 4 per row
-        for (int row = 0; row < rows; row++) {
-            Set<Integer> placedColumns = new HashSet<>();
-            while (placedColumns.size() < 4) {
-                placedColumns.add(random.nextInt(columns));
-            }
-            for (int col : placedColumns) {
-                array[row][col] = -1;
+    private void populate() {
+        logger.debug("Populate the layout");
+        for (int row = 0; row < 18; row++) {
+            for (int col = 0; col < 9; col++) {
+                this.layout[row][col] = 0;
             }
         }
 
-        // Adjust the number of zeros in each column
-        adjustZeros(array, rows, columns);
-    }
+        for (int outer = 0; outer < 18; outer++) {
+            if (outer % 2 == 0) {
+                this.layout[outer][0] = -1;
+                this.layout[outer][2] = -1;
+                this.layout[outer][4] = -1;
+                this.layout[outer][6] = -1;
+            } else {
+                this.layout[outer][1] = -1;
+                this.layout[outer][3] = -1;
+                this.layout[outer][5] = -1;
+                this.layout[outer][7] = -1;
+            }
 
-    private void adjustZeros(int[][] array, int rows, int columns) {
-        int[] zeroCounts = new int[columns];
-
-        // Count initial zeros in each column
-        for (int col = 0; col < columns; col++) {
-            for (int row = 0; row < rows; row++) {
-                if (array[row][col] == 0) {
-                    zeroCounts[col]++;
-                }
+            if (this.layout[outer][7] == -1) {
+                this.layout[outer][8] = 0;
+            } else {
+                this.layout[outer][8] = -1;
             }
         }
 
-        // Adjust each column's zero count to match the desired targets
-        adjustColumn(array, zeroCounts, 0, 9);     // First column: 9 zeros
-        adjustColumn(array, zeroCounts, columns - 1, 11);  // Last column: 11 zeros
+        this.layout[1][1] = 0;
+        this.layout[2][2] = 0;
+        this.layout[3][3] = 0;
+        this.layout[4][4] = 0;
+        this.layout[5][5] = 0;
+        this.layout[6][6] = 0;
+        this.layout[7][7] = 0;
 
-        // Adjust the other columns to have 10 zeros
-        for (int col = 1; col < columns - 1; col++) {
-            adjustColumn(array, zeroCounts, col, 10);  // Other columns: 10 zeros
-        }
-    }
-
-    private void adjustColumn(int[][] array, int[] zeroCounts, int col, int targetZeros) {
-        Random random = new Random();
-
-        // Adjust zeros down if we have too many
-        while (zeroCounts[col] > targetZeros) {
-            int row = random.nextInt(array.length);
-            if (array[row][col] == 0) {
-                array[row][col] = -1;
-                zeroCounts[col]--;
-            }
-        }
-
-        // Adjust zeros up if we have too few
-        while (zeroCounts[col] < targetZeros) {
-            int row = random.nextInt(array.length);
-            if (array[row][col] == -1) {
-                array[row][col] = 0;
-                zeroCounts[col]++;
-            }
-        }
+        this.layout[4][8] = 0;
+        this.layout[8][8] = 0;
     }
 }

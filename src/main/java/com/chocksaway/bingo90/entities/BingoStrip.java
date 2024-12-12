@@ -1,18 +1,20 @@
 package com.chocksaway.bingo90.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 public class BingoStrip {
+    private static final Logger logger = LoggerFactory.getLogger(BingoStrip.class);
     private final int columnHeight;
-    //private int[][] overlay;
 
     public BingoStrip(final int columnHeight) {
         this.columnHeight = columnHeight;
-
-        //overlay = new int[columnHeight][9];
     }
 
     public int[][] update(int[][] overlay) {
+        logger.debug("Updating overlay with bingo numbers");
 
         final var bingoNumberGenerator = new BingoNumbersGenerator();
 
