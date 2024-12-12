@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BingoData {
 
-    List<ImmutablePair<Integer, Integer>> getBingoNumbers();
+    List<ImmutablePair<Integer, Integer>> load();
 
     int getTotal();
 
