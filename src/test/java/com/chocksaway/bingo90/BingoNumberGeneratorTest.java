@@ -23,7 +23,7 @@ public class BingoNumberGeneratorTest {
     public void testBingoNumberGeneratorReturn90Numbers() {
         final var bingoNumberGenerator = new BingoNumbersGenerator();
 
-        final var bingoNumbers = bingoNumberGenerator.getBingoNumbers();
+        final var bingoNumbers = bingoNumberGenerator.load();
 
         assertEquals(90, bingoNumbers.size());
     }
@@ -44,7 +44,7 @@ public class BingoNumberGeneratorTest {
 
         assertEquals(3, bingoNumbers.size());
 
-        assertEquals(87, bingoNumberGenerator.getBingoNumbers().size());
+        assertEquals(87, bingoNumberGenerator.load().size());
     }
 
     @Test
